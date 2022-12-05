@@ -3,7 +3,7 @@ const run = async () => {
     console.log(crates);
     const rows = crates.split("\n");
     console.log(rows);
-    let crateArray = [];
+    let crateArray: string[][] = [];
     let instructions = [];
     let cratesDone = false;
 
@@ -13,10 +13,26 @@ const run = async () => {
         } else {
             if (!cratesDone) {
                 //Add to crates
+                //Add 1, then every other
+                row.split("").forEach((char, index) => {
+                    if (char.match(/[a-z]/i)) {
+                        //Input!
+                        //1, 5, 9, 13, 17
+                        //1 + n * 4 = 5
+                        // (5-1) / 4
+                        console.log(char, index);
+                        console.log((index - 1) / 4);
+                        const id = (index - 1) / 4;
+                        if (!crateArray[id]) {
+                            crateArray.push([char]);
+                        } else [crateArray[id].push(char)];
+                    }
+                });
             } else {
                 //Add to instructions
             }
         }
     });
+    console.log(crateArray);
 };
 run();
