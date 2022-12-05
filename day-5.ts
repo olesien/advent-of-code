@@ -36,5 +36,23 @@ const run = async () => {
 
     console.log(cratesObject);
     console.log(instructions);
+
+    instructions.forEach((instruction) => {
+        const crateFrom = cratesObject[instruction.from];
+        const crateTo = cratesObject[instruction.to];
+        const container = crateFrom.shift();
+        if (container) {
+            crateTo.unshift(container);
+        }
+    });
+
+    console.log(cratesObject);
+    const letterString = Object.values(cratesObject).reduce(
+        (priorLetters, letterArray) => {
+            return priorLetters + letterArray[0];
+        },
+        ""
+    );
+    console.log(letterString);
 };
 run();
