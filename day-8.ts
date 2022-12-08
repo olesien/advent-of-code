@@ -29,12 +29,6 @@ const run = async () => {
                 }
             }
         });
-
-        // if (visible) {
-        //     console.log("in");
-        //     console.log(treeRow);
-        //     console.log(i + " is visible with length" + treeLength);
-        // }
         return visibleLeft || visibleRight;
     };
 
@@ -77,7 +71,65 @@ const run = async () => {
         return sum + rowSum;
     }, 0);
 
+    const ratings = (
+        treeLength: number,
+        i: number,
+        treeRow: { tree: number; id: number }[]
+    ) => {
+        let visibleLeft = true;
+        let leftScore = 1;
+        let visibleRight = true;
+        let rightScore = 1;
+        //Left to right
+        // console.log("Array below is ")
+        treeRow.forEach((blockingTree) => {
+            if (blockingTree.id < i) {
+                if (treeLength <= blockingTree.tree) {
+                    visibleLeft = false;
+                }
+                if (visibleLeft) {
+                    leftScore++;
+                }
+            }
+            if (blockingTree.id > i) {
+                if (treeLength <= blockingTree.tree) {
+                    visibleRight = false;
+                }
+                if (visibleRight) {
+                    rightScore++;
+                }
+            }
+        });
+        return [leftScore, rightScore];
+    };
+
+    const treeRatings = treesMap.reduce(
+        (previousRatings, treeRow, columnId) => {
+            treeRow.forEach((tree, rowId) => {
+                const treeColumn = treesMap.map((treeRow) => {
+                    const tree = treeRow.find((tree, index) => index === rowId);
+                    return tree ? tree : 0;
+                });
+                const [left, right] = ratings(
+                    tree,
+                    rowId,
+                    treeRow.map((tree, index) => ({ tree, id: index }))
+                );
+                const [top, bottom] = ratings(
+                    tree,
+                    columnId,
+                    treeColumn.map((tree, index) => ({ tree, id: index }))
+                );
+                console.log("returning");
+                previousRatings.push(left * right * top * bottom);
+            });
+            return previousRatings;
+        },
+        []
+    );
+
     console.log(visibleTrees);
+    console.log(treeRatings);
 };
 
 run();
