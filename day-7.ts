@@ -102,11 +102,19 @@ const run = async () => {
             const file = splitPath[splitPath.length - 1];
             splitPath.forEach((directory, index) => {
                 const path = directory !== "" ? directory : "/";
+                const sumOnesBefore = splitPath.reduce((sum, path, i) => {
+                    if (i <= index) {
+                        return sum + "?" + path;
+                    }
+                    return sum;
+                });
+                console.log(sumOnesBefore);
                 if (path !== file) {
-                    if (path in newSizes) {
-                        newSizes[path] = newSizes[path] + Number(size);
+                    if (sumOnesBefore in newSizes) {
+                        newSizes[sumOnesBefore] =
+                            newSizes[sumOnesBefore] + Number(size);
                     } else {
-                        newSizes[path] = Number(size);
+                        newSizes[sumOnesBefore] = Number(size);
                     }
                 }
             });
@@ -124,6 +132,17 @@ const run = async () => {
         }
         return totalSize;
     }, 0);
+    const sortedSizes = Object.keys(sizes)
+        .map((directory) => {
+            const size = sizes[directory];
+            const isEnough = size >= 4125990;
+            return { size, directory, isEnough };
+        })
+        .sort((a, b) => b.size - a.size);
     console.log(summedSizes);
+    console.log(sortedSizes);
 };
+//wrong: bqpslnv
 run();
+8697554;
+8381165;
