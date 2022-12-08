@@ -75,8 +75,9 @@ const run = async () => {
                             directories: {
                                 ...system.directories,
                                 [exactFile]:
-                                    Number(system.directories[exactFile]) +
-                                    Number(size),
+                                    Number(
+                                        system.directories?[exactFile]
+                                    ) + Number(size),
                             },
                         };
                     return {
@@ -143,6 +144,3 @@ const run = async () => {
     console.log(sortedSizes);
 };
 //wrong: bqpslnv
-run();
-8697554;
-8381165;
