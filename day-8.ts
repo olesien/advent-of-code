@@ -77,29 +77,44 @@ const run = async () => {
         treeRow: { tree: number; id: number }[]
     ) => {
         let visibleLeft = true;
-        let leftScore = 1;
+        let leftScore = -1;
         let visibleRight = true;
-        let rightScore = 1;
-        //Left to right
-        // console.log("Array below is ")
-        treeRow.forEach((blockingTree) => {
-            if (blockingTree.id < i) {
-                if (treeLength <= blockingTree.tree) {
-                    visibleLeft = false;
-                }
-                if (visibleLeft) {
-                    leftScore++;
-                }
+        let rightScore = -1;
+
+        //console.log("---------- LEFT ----------");
+        for (let id = i; id >= 0; id--) {
+            const blockingTree = treeRow[id];
+            //console.log(leftScore);
+            if (visibleLeft) {
+                leftScore++;
             }
-            if (blockingTree.id > i) {
-                if (treeLength <= blockingTree.tree) {
-                    visibleRight = false;
-                }
-                if (visibleRight) {
-                    rightScore++;
-                }
+            if (treeLength <= blockingTree.tree && !(id === i)) {
+                //console.log("No longer visible");
+                visibleLeft = false;
             }
-        });
+        }
+        // console.log(treeRow, i);
+        // console.log("---------- RIGHT ----------");
+        for (let id = i; id < treeRow.length; id++) {
+            const blockingTree = treeRow[id];
+            //console.log(rightScore);
+            if (visibleRight) {
+                rightScore++;
+            }
+            if (treeLength <= blockingTree.tree && !(id === i)) {
+                //console.log("No longer visible");
+                visibleRight = false;
+            }
+        }
+
+        if (i === 0) {
+            leftScore = 0;
+        } else if (i === treeRow.length - 1) {
+            rightScore = 0;
+        }
+
+        // if (leftScore > 2) leftScore = 2;
+        // if (rightScore > 2) rightScore = 2;
         return [leftScore, rightScore];
     };
 
@@ -120,7 +135,10 @@ const run = async () => {
                     columnId,
                     treeColumn.map((tree, index) => ({ tree, id: index }))
                 );
-                console.log("returning");
+                //console.log("returning");
+                //console.log(columnId, rowId);
+
+                //console.log(left, right, top, bottom);
                 previousRatings.push(left * right * top * bottom);
             });
             return previousRatings;
@@ -129,7 +147,7 @@ const run = async () => {
     );
 
     console.log(visibleTrees);
-    console.log(treeRatings);
+    console.log(treeRatings.sort((a, b) => b - a));
 };
 
 run();
