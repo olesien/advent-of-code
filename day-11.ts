@@ -12,6 +12,17 @@ const run = async () => {
     const inspectedItems: number[][] = monkeyList.map(() => []);
     //Add for loop here up to 20 for each round!
 
+    let counts: { [key: string]: number } = {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+    };
+
     for (let round = 1; round <= 20; round++) {
         console.log("round " + round);
         monkeyList.forEach((monkey, monkeyIndex) => {
@@ -63,12 +74,12 @@ const run = async () => {
                 }
             };
             console.log("Monkey: " + monkeyIndex + ":");
-            inspectedItems[monkeyIndex].push(0);
+
             items.forEach((item, index) => {
                 console.log(
                     " Monkey inspects an item with a worry level of " + item
                 );
-
+                counts[String(monkeyIndex)] += 1;
                 worryLevel = item;
                 worryLevel = increaseWorryLevel(item);
                 console.log("  Worry level is changed to " + worryLevel);
@@ -103,11 +114,11 @@ const run = async () => {
         console.log(monkeyItems);
     }
     //console.log(inspectedItems);
-    const inspectedItemsCount = inspectedItems.map((monkey) => {
-        return monkey.reduce((prevCount, count) => {
-            return prevCount + 1;
-        });
-    });
-    console.log(inspectedItemsCount);
+    // const inspectedItemsCount = inspectedItems.map((monkey) => {
+    //     return monkey.reduce((prevCount, count) => {
+    //         return prevCount + 1;
+    //     });
+    // });
+    console.log(counts);
 };
 run();
