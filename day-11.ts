@@ -28,7 +28,7 @@ const run = async () => {
             testTrue,
             testFalse
         );
-        const items = monekyItems[monkeyIndex];
+        const items = [...monekyItems[monkeyIndex]];
         items.shift();
         console.log(items);
 
@@ -36,9 +36,6 @@ const run = async () => {
         const operationStats = operation.split("=")[1];
         //console.log(operationStats);
         let changeNumber: string | number = operationStats.split(/[*+]+/)[1];
-
-        console.log(changeNumber);
-
         const divisibleBy = Number(test.split("by")[1]);
 
         //Operation: First bit is ALWAYS "old", second can be "old" or number, with it either being * or + as seperator
@@ -56,27 +53,42 @@ const run = async () => {
                 return worryLevel + changeNumber;
             }
         };
-
+        console.log("Monkey: " + monkeyIndex + ":");
         items.forEach((item, index) => {
+            console.log(
+                " Monkey inspects an item with a worry level of " + item
+            );
             inspectedItems[monkeyIndex].push(item);
             worryLevel = item;
             worryLevel = increaseWorryLevel();
+            console.log("  Worry level is changed to " + worryLevel);
             worryLevel = Math.floor(worryLevel / 3);
-            console.log(worryLevel);
+            console.log(
+                "  Monkey gets bored with item. Worry level is divided by 3 to " +
+                    worryLevel
+            );
             //console.log(item);
             let newIndex = 0;
             if (worryLevel % divisibleBy === 0) {
                 //Throw to first
-                console.log("first");
+                //console.log("first");
                 newIndex = Number(testTrue.split("monkey")[1]);
             } else {
                 //Throw to second
-                console.log("second");
+                //console.log("second");
                 newIndex = Number(testFalse.split("monkey")[1]);
             }
+
             monekyItems[newIndex].push(worryLevel);
-            monekyItems[monkeyIndex].splice(index, 1);
+
+            console.log(
+                "  Item with worry level " +
+                    worryLevel +
+                    " is thrown to monkey " +
+                    newIndex
+            );
         });
+        monekyItems.splice(monkeyIndex, 1, []);
     });
     console.log(inspectedItems);
     console.log(monekyItems);
